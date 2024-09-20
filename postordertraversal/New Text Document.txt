@@ -1,0 +1,58 @@
+class TreeNode {
+    int val;
+    TreeNode left, right;
+
+    TreeNode(int item) {
+        val = item;
+        left = right = null;
+    }
+}
+
+public class PostorderTraversalUsingStack {
+    private static final int MAX_SIZE = 100;  // Adjust size as needed
+
+    public static void postorderTraverse(TreeNode root) {
+        if (root == null) {
+            return;
+        }
+
+        TreeNode[] stack1 = new TreeNode[MAX_SIZE];
+        TreeNode[] stack2 = new TreeNode[MAX_SIZE];
+        int top1 = -1;  // Top of stack1
+        int top2 = -1;  // Top of stack2
+
+        // Step 1: Push root to first stack
+        stack1[++top1] = root;
+
+        // Step 2: Loop while first stack is not empty
+        while (top1 >= 0) {
+            // Step 2.1: Pop a node from first stack and push it to second stack
+            TreeNode node = stack1[top1--];
+            stack2[++top2] = node;
+
+            // Step 2.2: Push left and right children of the popped node to first stack
+            if (node.left != null) {
+                stack1[++top1] = node.left;
+            }
+            if (node.right != null) {
+                stack1[++top1] = node.right;
+            }
+        }
+
+        // Step 3: Print contents of second stack (which contains postorder traversal)
+        while (top2 >= 0) {
+            System.out.print(stack2[top2--].val + " ");
+        }
+    }
+
+    public static void main(String[] args) {
+        // Example usage:
+        TreeNode root = new TreeNode(1);
+        root.left = new TreeNode(2);
+        root.right = new TreeNode(3);
+        root.left.left = new TreeNode(4);
+        root.left.right = new TreeNode(5);
+
+        postorderTraverse(root);  // Output should be 4 5 2 3 1
+    }
+}
